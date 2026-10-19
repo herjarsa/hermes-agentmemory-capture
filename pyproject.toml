@@ -1,6 +1,6 @@
 [project]
 name = "hermes-agentmemory-capture"
-version = "0.1.0"
+version = "0.2.0"
 description = "Captura automática de sesiones y herramientas de Hermes hacia AgentMemory"
 readme = "README.md"
 license = { text = "MIT" }
