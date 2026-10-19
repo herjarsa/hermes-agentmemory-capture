@@ -15,21 +15,34 @@ AgentMemory (`http://localhost:3111`, vía `AGENTMEMORY_URL` /
 - Enriquecimiento de ficheros, permisos, task tracking con prioridad,
   tracking de config/modelo.
 
-## Equivalentes Hermes (a verificar en contributor-guide)
+## Mapeo OpenCode → Hermes (implementado en `__init__.py`)
 
-- `context_engine`: pluggable context-engine hooks.
-- Webhooks: runs event-driven.
-- Los plugins pueden declarar `tools`, `hooks`, `middleware`, `env`
-  (el install de hindsight confirma que el manifiesto los soporta).
-- Precedente: el plugin Hindsight ya hace captura automática por turno.
+El transporte es `POST /agentmemory/observe` con el mismo envelope de
+OpenCode (`hookType, sessionId, project, cwd, timestamp, data`), timeout 5s,
+Bearer `AGENTMEMORY_SECRET` (env → `~/.agentmemory/.env` → `~/.agentmemory/secret`
+solo contra backend local), fail-open total. Se reutiliza el vocabulario de
+`hookType` de OpenCode cuando la semántica coincide.
+
+| OpenCode (22 hooks) | Hermes | hookType enviado | Estado |
+|---|---|---|---|
+| session.created | `on_session_start` | `session_created` | ✓ |
+| session (idle/status/updated) | `on_session_end` | `session_end` | parcial |
+| tool result | `post_tool_call` (tool_name, args, result, status, duration_ms, ids) | `post_tool_use` / `post_tool_failure` | ✓ directo |
+| tool start | `pre_tool_call` (solo observa, devuelve None — un dict vetaría la tool) | `pre_tool_call` | ✓ |
+| prompt_submit / llm_params | `pre_llm_call` | `prompt_submit` | parcial (payload según kwargs) |
+| assistant_message | `post_llm_call` | `assistant_message` | parcial (payload según kwargs) |
+| subagent start/stop | `subagent_start` / `subagent_stop` | iguales | ✓ |
+| skill lifecycle | `on_skill_lifecycle` | (HITO 3) | pendiente |
+| message.updated/removed, file enrichment, permissions, task tracking, config tracking, compaction, retry, patch, reasoning, step-finish | — | — | GAP: Hermes no expone esos eventos; no inventado |
 
 ## Gaps conocidos
 
-- La API de hooks de OpenCode NO existe en Hermes: hay que mapear cada
-  evento a lo que Hermes exponga; lo que no tenga equivalente se
-  documenta aquí y se deja fuera del MVP.
-- Transporte al backend: REST de agentmemory o reutilizar el MCP
-  (`node bin.mjs`, ya operativo en este equipo).
+- La API de hooks de OpenCode NO existe en Hermes: solo se mapeó lo que
+  Hermes expone (`VALID_HOOKS` en `hermes_cli/plugins.py`: sesión, tools,
+  LLM, streaming, subagentes, skills, kanban, gateway…).
+- Transporte directo al backend: REST `POST /agentmemory/observe`
+  (igual que OpenCode). No se reutiliza el MCP para no acoplar el plugin
+  a la config MCP del usuario.
 
 ## Fases
 
