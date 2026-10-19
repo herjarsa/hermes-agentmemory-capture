@@ -1,0 +1,6 @@
+name: hermes-agentmemory-capture
+version: 0.1.0
+description: "Captura automática de sesiones y herramientas de Hermes hacia el backend AgentMemory (port de agentmemory-capture de OpenCode)."
+requires_env:
+  - AGENTMEMORY_URL
+  - AGENTMEMORY_SECRET
