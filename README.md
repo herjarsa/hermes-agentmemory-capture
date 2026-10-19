@@ -3,8 +3,8 @@
 Port del plugin `agentmemory-capture` de OpenCode a Hermes: captura
 automática de sesiones y uso de herramientas hacia AgentMemory.
 
-Estado: **scaffold (HITO 1)** — spec + esqueleto. Implementación pendiente
-(HITO 2, ver `SPEC.md`).
+Estado: **funcional (HITO 2)** — 8 hooks activos, transporte verificado
+contra backend real. Ver `SPEC.md` para el mapeo y gaps.
 
 ## Requisitos
 
@@ -13,10 +13,10 @@ Estado: **scaffold (HITO 1)** — spec + esqueleto. Implementación pendiente
   - `AGENTMEMORY_URL` (ej. `http://localhost:3111`)
   - `AGENTMEMORY_SECRET`
 
-## Instalación (cuando esté el HITO 2)
+## Instalación
 
 ```bash
-hermes plugins install D:/GITHUB/hermes-agentmemory-capture
+hermes plugins install herjarsa/hermes-agentmemory-capture --yes-deps --enable
 hermes plugins list   # debe salir enabled
 ```
 
