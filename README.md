@@ -20,6 +20,15 @@ hermes plugins install herjarsa/hermes-agentmemory-capture --yes-deps --enable
 hermes plugins list   # debe salir enabled
 ```
 
+### Vía pip (PyPI)
+
+```bash
+pip install hermes-agentmemory-capture
+```
+
+Descubierto automáticamente por Hermes vía entry point
+`hermes_agent.plugins` (requiere reiniciar la sesión).
+
 ## Verificación
 
 Captura de prueba → comprobar con las tools MCP `memory_*` o el viewer

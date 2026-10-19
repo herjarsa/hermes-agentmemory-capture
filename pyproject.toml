@@ -2,7 +2,21 @@
 name = "hermes-agentmemory-capture"
 version = "0.1.0"
 description = "Captura automática de sesiones y herramientas de Hermes hacia AgentMemory"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "herjarsa" }]
 requires-python = ">=3.10"
+dependencies = []
+
+[project.entry-points."hermes_agent.plugins"]
+hermes-agentmemory-capture = "hermes_agentmemory_capture"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.hermes]
 plugin = true
